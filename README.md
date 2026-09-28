@@ -27,7 +27,7 @@ Crewmate is divided into two core parts:
 2. **Backend:** An asynchronous FastAPI + PostgreSQL + SQLAlchemy 2.0 backend powering the trust engine, agent logic, and mission audits.
 
 ```mermaid
-flowchart TD
+flowchart LR
 
 subgraph group_frontend["Console frontend"]
   node_app["App views<br/>[App.tsx]"]
