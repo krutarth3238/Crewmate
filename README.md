@@ -1,5 +1,4 @@
 <div align="center">
-  <img width="800" alt="Crewmate Banner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
   <h1>🚀 Crewmate</h1>
   <p><b>Your Gamified AI Co-Founder Console</b></p>
   
