@@ -1,0 +1,6 @@
+{
+  "name": "Crewmate · The Gamified AI Co-Founder",
+  "description": "Autonomous AI teammate that earns your trust through real, verified missions. Made by Krutarth Ashar and Raghav Arora for the Paytm AI Hackathon.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

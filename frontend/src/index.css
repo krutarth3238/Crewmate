@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-cobalt: #1842ff;
+    --color-vermilion: #ff441f;
+    --color-lime: #d8f040;
+    --color-emerald: #00c853;
+    --color-obsidian: #080a0f;
+    --color-cream: #0d111c;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #080a0f;
+    color: #cbd5e1;
+    font-family: 'Hanken Grotesk', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Custom selection */
+  ::selection {
+    background-color: #d8f040;
+    color: #080a0f;
+  }
+}
+
+/* World-class UI utilities */
+.bg-grid-white {
+  background-size: 40px 40px;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+.bg-grid-white-subtle {
+  background-size: 40px 40px;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+}
+.glass-panel {
+  background: rgba(13, 17, 28, 0.4);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02),
+              0 8px 32px -8px rgba(0, 0, 0, 0.5);
+}
+
+/* Dylan by Wiescher-Design Font Definition & Local Bindings */
+@font-face {
+  font-family: 'Worry-Free!DylanWiescher-Design';
+  src: local('Worry-Free!DylanWiescher-Design'),
+       local('Dylan-Bold'),
+       local('Dylan Bold'),
+       local('Dylan'),
+       local('DylanWiescher-Design');
+  font-weight: 600 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Dylan';
+  src: local('Worry-Free!DylanWiescher-Design'),
+       local('Dylan-Bold'),
+       local('Dylan Bold'),
+       local('Dylan'),
+       local('DylanWiescher-Design');
+  font-weight: 600 900;
+  font-display: swap;
+}
+
+/* Typography Utility Classes */
+.font-clash {
+  font-family: 'Clash Display', 'Cabinet Grotesk', 'Bricolage Grotesque', 'Space Grotesk', sans-serif;
+  letter-spacing: -0.025em;
+}
+
+.font-bricolage {
+  font-family: 'Bricolage Grotesque', 'Clash Display', 'Space Grotesk', sans-serif;
+  letter-spacing: -0.025em;
+}
+
+.font-brand,
+.font-dylan {
+  font-family: 'Clash Display', 'Cabinet Grotesk', 'Bricolage Grotesque', 'Worry-Free!DylanWiescher-Design', 'Dylan', 'Space Grotesk', sans-serif;
+  letter-spacing: -0.025em;
+}
+
+.font-syne {
+  font-family: 'Clash Display', 'Cabinet Grotesk', 'Bricolage Grotesque', 'Space Grotesk', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-grotesk {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.font-mono {
+  font-family: 'Space Mono', monospace;
+}
+
+.font-body {
+  font-family: 'Hanken Grotesk', sans-serif;
+}
+
+/* Tactile Brutalist Hard Shadows */
+.shadow-hard-black {
+  box-shadow: 4px 4px 0px 0px #0d0e11;
+}
+
+.shadow-hard-black-lg {
+  box-shadow: 6px 6px 0px 0px #0d0e11;
+}
+
+.shadow-hard-black-sm {
+  box-shadow: 2px 2px 0px 0px #0d0e11;
+}
+
+.shadow-hard-cobalt {
+  box-shadow: 4px 4px 0px 0px #1638f0;
+}
+
+.shadow-hard-cobalt-lg {
+  box-shadow: 6px 6px 0px 0px #1638f0;
+}
+
+.shadow-hard-vermilion {
+  box-shadow: 4px 4px 0px 0px #ff441f;
+}
+
+.shadow-hard-lime {
+  box-shadow: 4px 4px 0px 0px #d8f040;
+}
+
+/* Pressed button states */
+.btn-press:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px 0px #0d0e11 !important;
+}
+
+/* Custom scrollbar hiding where appropriate */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+

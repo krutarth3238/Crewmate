@@ -1,0 +1,17 @@
+.env
+.env.*
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.pyc
+dist/
+build/
+coverage/
+.DS_Store
+*.log
+firebase-service-account.json
+credentials.json
+*.db
+.pytest_cache/
+.ruff_cache/
