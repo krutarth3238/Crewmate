@@ -24,7 +24,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </div>
 
             <p className="font-body text-xs text-neutral-400 max-w-md leading-relaxed">
-              Hire an autonomous AI teammate. Watch it earn your trust through real, verified missions. Made by <strong className="text-white">Krutarth Ashar</strong> and <strong className="text-white">Raghav Arora</strong> for the <strong className="text-[#38BDF8]">Paytm AI Hackathon</strong>.
+              Hire an autonomous AI teammate. Watch it earn your trust through real, verified missions.
             </p>
 
             <div className="flex items-center gap-2 text-[11px] text-neutral-500">
@@ -88,8 +88,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               Hackathon Submission
             </div>
             <div className="text-xs text-neutral-400 space-y-1.5">
-              <div><strong>Hackathon:</strong> <span className="text-white font-medium">Paytm AI Hackathon</span></div>
-              <div><strong>Builders:</strong> <span className="text-[#38BDF8] font-medium">Krutarth Ashar & Raghav Arora</span></div>
               <div><strong>Category:</strong> Autonomous AI Teammates</div>
               <div><strong>Trust Mode:</strong> Earned Authority Progression</div>
             </div>
@@ -97,40 +95,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
         </div>
 
-        {/* Highlighted Hackathon Attribution Banner */}
-        <div className="my-8 p-4 sm:p-5 rounded-xl bg-[#0B0E17] border border-[#1E2B48] flex flex-col md:flex-row items-center justify-between gap-4 shadow-[0_0_30px_rgba(24,66,255,0.12)]">
-          <div className="flex items-center gap-3.5 text-left w-full md:w-auto">
-            <div className="w-10 h-10 rounded-lg bg-[#1842FF] text-[#D8F040] flex items-center justify-center font-bold text-base shrink-0 border border-[#38BDF8]/40 shadow-[0_0_15px_rgba(24,66,255,0.4)]">
-              ⚡
-            </div>
-            <div>
-              <div className="text-[11px] font-mono font-bold text-[#D8F040] uppercase tracking-wider flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#00C853] animate-pulse" />
-                Paytm AI Hackathon Project
-              </div>
-              <div className="text-sm sm:text-base font-semibold text-white mt-0.5">
-                Made by <span className="text-[#38BDF8] font-bold">Krutarth Ashar</span> and <span className="text-[#38BDF8] font-bold">Raghav Arora</span> for the <span className="text-[#D8F040] font-bold">Paytm AI Hackathon</span>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 self-start md:self-auto shrink-0">
-            <span className="px-3 py-1.5 rounded-lg bg-[#141B2D] border border-[#1E2B48] text-xs font-mono text-neutral-200">
-              Krutarth Ashar
-            </span>
-            <span className="px-3 py-1.5 rounded-lg bg-[#141B2D] border border-[#1E2B48] text-xs font-mono text-neutral-200">
-              Raghav Arora
-            </span>
-          </div>
-        </div>
+
 
         {/* Bottom copyright row */}
         <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500">
           <div>
             © {new Date().getFullYear()} Crewmate Autonomous Runtime.
           </div>
-          <div className="flex items-center gap-2 text-neutral-400">
-            <span>Made by <strong className="text-neutral-200">Krutarth Ashar</strong> and <strong className="text-neutral-200">Raghav Arora</strong> for the <strong className="text-[#38BDF8]">Paytm AI Hackathon</strong></span>
-          </div>
+
         </div>
 
       </div>

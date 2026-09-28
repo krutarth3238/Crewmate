@@ -45,7 +45,7 @@ export const MissionLog: React.FC<MissionLogProps> = ({
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#141B2D] border border-[#1E2B48] text-[#38BDF8] font-mono text-xs font-bold uppercase tracking-wider rounded-lg mb-2">
               <BookOpen className="w-3.5 h-3.5 text-[#D8F040]" />
-              CHAPTER 5 · FEATURE C · THE MISSION DIARY
+              
             </div>
             <h2 className="font-bricolage text-3xl sm:text-4xl font-bold text-white tracking-tight">
               Every Little Thing It Does, Written Down.

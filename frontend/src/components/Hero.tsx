@@ -36,7 +36,7 @@ export const Hero: React.FC<HeroProps> = ({
         <div className="flex flex-wrap items-center gap-2 mb-6">
           <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-[#0D0E11] text-white font-mono text-xs font-bold uppercase tracking-wider">
             <CrewmateMark size={14} variant="color" />
-            PAYTM BUILD FOR INDIA HACKATHON
+            AI CO-FOUNDER CONSOLE
           </div>
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border border-[#0D0E11] text-[#0D0E11] font-mono text-xs font-bold uppercase">
             AUTONOMOUS AI CO-FOUNDER

@@ -51,7 +51,7 @@ export const CollaborationRadar: React.FC<CollaborationRadarProps> = ({ teammate
         <div className="space-y-4">
           <div>
             <span className="text-xs font-mono text-[#38BDF8] uppercase tracking-wider block">
-              CHAPTER 11 · FEATURE J · TEAMWORK CO-EXISTENCE (NO SCOREBOARDS)
+              
             </span>
             <h3 className="font-bricolage font-bold text-2xl text-white">
               Who Handled What This Week
@@ -178,7 +178,7 @@ export const CollaborationRadar: React.FC<CollaborationRadarProps> = ({ teammate
         <div className="space-y-4 pt-4 border-t border-[#182030]">
           <div>
             <span className="text-xs font-mono text-[#38BDF8] uppercase tracking-wider block">
-              CHAPTER 10 · FEATURE I · LOOKING BACK TIMELINE
+              
             </span>
             <h3 className="font-bricolage font-bold text-2xl text-white">
               The Journey from Skeptical Homepage Click to Trusted Partner
@@ -228,18 +228,6 @@ export const CollaborationRadar: React.FC<CollaborationRadarProps> = ({ teammate
               <span className="w-9 h-9 rounded-xl bg-[#1842FF] text-[#D8F040] flex items-center justify-center font-bold text-sm border border-[#38BDF8]/40 shadow-sm">
                 ⚡
               </span>
-              <div>
-                <div className="text-xs font-mono font-bold text-[#D8F040] uppercase tracking-wider">
-                  Paytm AI Hackathon
-                </div>
-                <div className="text-sm font-semibold text-white">
-                  Made by <strong className="text-[#38BDF8]">Krutarth Ashar</strong> and <strong className="text-[#38BDF8]">Raghav Arora</strong> for the <span className="text-[#D8F040]">Paytm AI Hackathon</span>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 text-xs font-mono text-neutral-300">
-              <span className="px-2.5 py-1 bg-[#141B2D] border border-[#1E2B48] rounded-md">Krutarth Ashar</span>
-              <span className="px-2.5 py-1 bg-[#141B2D] border border-[#1E2B48] rounded-md">Raghav Arora</span>
             </div>
           </div>
         </div>

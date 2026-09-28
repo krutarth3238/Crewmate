@@ -110,7 +110,7 @@ export const INITIAL_TEAMMATE: TeammateProfile = {
   avatarSeed: 'RN',
   visualMark: '⚡',
   roleTitle: 'Autonomous Operations Teammate',
-  businessType: "Meera's Artisan Bakery (Fresh Baked Goods & Cafe)",
+  businessType: "Your Organization",
   currentLevel: 1, // Starts at Level 1 Shadow as in Chapter 4!
   currentXp: 14,
   nextLevelXp: 25,
@@ -361,8 +361,8 @@ export const SAMPLE_SIMULATOR_PRESETS = [
 export const RELATIONSHIP_TIMELINE: RelationshipMilestone[] = [
   {
     day: 'Day 01',
-    title: 'Recruited in Shadow Mode (Feature G → A → H)',
-    description: 'Meera typed "Figure out why my weekend sales dropped", watched it think, and hired Ren. Ren initialized with Level 1 Shadow clearance (0 mutation access). Watched 40 orders and surfaced 2 supplier price fluctuations.',
+    title: 'Recruited in Shadow Mode',
+    description: 'You typed "Figure out why my weekend sales dropped", watched it think, and hired Ren. Ren initialized with Level 1 Shadow clearance (0 mutation access).',
     levelBadge: 'Level 1 · Shadow',
     highlightStat: 'Zero mutations made (100% safe)'
   },
@@ -383,8 +383,8 @@ export const RELATIONSHIP_TIMELINE: RelationshipMilestone[] = [
   {
     day: 'Day 19 (Today)',
     title: '12-Day Flawless Reliability Streak',
-    description: '142 total tasks completed without a single human rollback or error. 18.5 hours saved every week for Meera and her bakery team.',
+    description: '142 total tasks completed without a single human rollback or error. Significant hours saved every week for the team.',
     levelBadge: '12-Day Streak · 100% Reliable',
-    highlightStat: '18.5 hrs saved / wk'
+    highlightStat: 'Zero Errors'
   }
 ];

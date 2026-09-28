@@ -123,19 +123,19 @@ export const ConsoleWorkspace: React.FC<ConsoleWorkspaceProps> = ({
 
   const windowTitles: Record<ConsoleWindowId, { title: string; subtitle: string }> = {
     simulator: {
-      title: 'WINDOW: LIVE OBJECTIVE SIMULATOR (FEATURE G)',
+      title: '',
       subtitle: 'Bounded Task Decomposition, Connected API Checks & Verification Dockets',
     },
     levels: {
-      title: 'WINDOW: 5-LEVEL AUTONOMY LADDER (FEATURE B)',
+      title: '',
       subtitle: 'Real Operational Clearance Matrix, Mathematical Failure Bounds & Promotion Gates',
     },
     missions: {
-      title: 'WINDOW: MISSION DIARY & AUDIT DOCKETS (FEATURE C)',
+      title: '',
       subtitle: 'Every Little Thing Written Down · Cryptographic Proof of Work & State Transitions',
     },
     skills: {
-      title: 'WINDOW: MODULAR SKILL MARKETPLACE (FEATURE D)',
+      title: '',
       subtitle: 'Equip Capabilities with 1 Toggle · 1-Sentence Plain Descriptions & Zero Config',
     },
     quests: {
@@ -153,15 +153,7 @@ export const ConsoleWorkspace: React.FC<ConsoleWorkspaceProps> = ({
       
       {/* 0. Top Hackathon Banner */}
       <div className="bg-[#0B0F19] border-b border-[#182030] px-4 py-1.5 text-xs font-mono text-neutral-300 flex items-center justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#141B2D] border border-[#1E2B48] text-[#D8F040] font-bold text-[10px] uppercase tracking-wider">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00C853] animate-pulse" />
-            Paytm AI Hackathon
-          </span>
-          <span className="text-neutral-300 text-xs">
-            Made by <strong className="text-white font-semibold">Krutarth Ashar</strong> and <strong className="text-white font-semibold">Raghav Arora</strong> for the <strong className="text-[#38BDF8] font-semibold">Paytm AI Hackathon</strong>
-          </span>
-        </div>
+
         <div className="text-[11px] text-neutral-500 font-mono hidden lg:block">
           BUILD FOR INDIA · BOUNDED AUTONOMOUS AGENTS
         </div>
@@ -403,9 +395,7 @@ export const ConsoleWorkspace: React.FC<ConsoleWorkspaceProps> = ({
           <span className="w-2 h-2 rounded-full bg-[#00C853] animate-pulse" />
           <span>Ren Bounded Runtime Active · Merkle Invariant: Zero Mutation Leakage</span>
         </div>
-        <div className="flex items-center gap-2 text-neutral-400">
-          <span>Made by <strong className="text-neutral-200">Krutarth Ashar</strong> and <strong className="text-neutral-200">Raghav Arora</strong> for the <strong className="text-[#38BDF8]">Paytm AI Hackathon</strong></span>
-        </div>
+
       </footer>
 
     </div>

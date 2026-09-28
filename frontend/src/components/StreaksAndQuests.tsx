@@ -88,7 +88,7 @@ export const StreaksAndQuests: React.FC<StreaksAndQuestsProps> = ({
               </div>
               <div>
                 <span className="text-xs font-mono text-[#38BDF8] uppercase tracking-wider block">
-                  CHAPTER 8 · FEATURE E · RELIABILITY COUNTER
+                  
                 </span>
                 <div className="font-bricolage font-bold text-2xl sm:text-3xl text-white">
                   {teammate.streakDays}-Day Flawless Completion Streak
@@ -99,7 +99,7 @@ export const StreaksAndQuests: React.FC<StreaksAndQuestsProps> = ({
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#00C853]/20 border border-[#00C853]/40 text-[#00C853] text-xs font-mono font-bold rounded-lg">
                 <CheckCircle2 className="w-4 h-4 text-[#00C853]" />
-                100% Zero Rollbacks
+                Zero Errors
               </span>
             </div>
           </div>
@@ -130,7 +130,7 @@ export const StreaksAndQuests: React.FC<StreaksAndQuestsProps> = ({
           <div className="flex items-center justify-between">
             <div>
               <span className="text-xs font-mono text-[#38BDF8] uppercase tracking-wider block">
-                CHAPTER 9 · FEATURE F · THE ONE TIME IT ASKS FIRST
+                
               </span>
               <h3 className="font-bricolage font-bold text-2xl text-white">
                 Human Sign-Off Queue

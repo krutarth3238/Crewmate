@@ -277,7 +277,7 @@ export const InteractiveSimulator: React.FC<InteractiveSimulatorProps> = ({
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#141B2D] border border-[#1E2B48] text-[#38BDF8] font-mono text-xs font-bold uppercase tracking-wider rounded-lg mb-2">
               <Sparkles className="w-3.5 h-3.5 text-[#D8F040]" />
-              CHAPTER 1 · FEATURE G · INTERACTIVE OBJECTIVE ENGINE
+              
             </div>
             <h2 className="font-bricolage text-3xl sm:text-4xl font-bold text-white tracking-tight">
               Type Any Business Objective. Watch It Execute.
