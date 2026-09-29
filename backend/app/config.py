@@ -19,6 +19,7 @@ class Settings(BaseSettings):
 
     # --- Firebase Auth ---
     FIREBASE_SERVICE_ACCOUNT_PATH: str = "./firebase-service-account.json"
+    FIREBASE_SERVICE_ACCOUNT_JSON: str | None = None
 
     # --- LLM providers (agent engine) ---
     GROQ_API_KEY: str | None = None
