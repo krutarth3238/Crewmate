@@ -86,12 +86,21 @@ def get_google_creds(user):
             client_id = data["client_id"]
             client_secret = data["client_secret"]
             token_uri = data.get("token_uri", "https://oauth2.googleapis.com/token")
+            
+        from app.google_oauth.router import _get_fernet
+        fernet = _get_fernet()
+        access_token = fernet.decrypt(user.google_access_token.encode()).decode() if user.google_access_token else None
+        refresh_token = fernet.decrypt(user.google_refresh_token.encode()).decode() if user.google_refresh_token else None
+            
     except Exception as e:
-        return str(e)
+        import traceback
+        print(f"DEBUG get_google_creds Exception: {repr(e)}")
+        traceback.print_exc()
+        return None
         
     return Credentials(
-        token=user.google_access_token,
-        refresh_token=user.google_refresh_token,
+        token=access_token,
+        refresh_token=refresh_token,
         token_uri=token_uri,
         client_id=client_id,
         client_secret=client_secret,
@@ -121,23 +130,27 @@ async def _send_email(args: dict, context_str: str = "", user=None) -> ToolResul
     # Try to actually send it via Gmail API
     creds = get_google_creds(user)
     if creds and "@" in to:
-        try:
-            service = build('gmail', 'v1', credentials=creds)
-            message = EmailMessage()
-            message.set_content(generated)
-            message['To'] = to
-            message['From'] = 'me'
-            message['Subject'] = subject
-            
-            encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
-            service.users().messages().send(userId="me", body={'raw': encoded_message}).execute()
-            output = f"Email sent to {to} with subject \"{subject}\":\n\n\"{generated}\"\n\n(SUCCESS: Real email sent via Gmail!)"
-        except Exception as e:
-            output = f"Drafted email to {to} with subject \"{subject}\":\n\n\"{generated}\"\n\n(FAILED to send: {e})"
+        if "[Simulated AI Content" in generated:
+            output = f"Drafted email to {to} with subject \"{subject}\":\n\n\"{generated}\"\n\n(Did not send real email: content is simulated.)"
+        else:
+            try:
+                service = build('gmail', 'v1', credentials=creds)
+                message = EmailMessage()
+                message.set_content(generated)
+                message['To'] = to
+                message['From'] = 'me'
+                message['Subject'] = subject
+                
+                encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
+                service.users().messages().send(userId="me", body={'raw': encoded_message}).execute()
+                output = f"Email sent to {to} with subject \"{subject}\":\n\n\"{generated}\"\n\n(SUCCESS: Real email sent via Gmail!)"
+            except Exception as e:
+                output = f"Drafted email to {to} with subject \"{subject}\":\n\n\"{generated}\"\n\n(FAILED to send: {e})"
     elif creds and "@" not in to:
         output = f"Drafted email for {to}:\n\n\"{generated}\"\n\n(Note: No email address provided — please specify a real email like 'send to john@example.com' to actually send it.)"
     else:
         output = f"Drafted email to {to}:\n\n\"{generated}\"\n\n(Note: Google account not connected — connect it in Settings to send real emails.)"
+
         
     return ToolResult(ok=True, output=output, systems_touched=["Email"])
 

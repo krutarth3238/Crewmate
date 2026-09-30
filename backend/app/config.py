@@ -12,7 +12,7 @@ class Settings(BaseSettings):
 
     # --- Core ---
     ENV: str = "development"
-    DEV_MODE_ENABLED: bool = True  # gates /api/dev/* routes (see teammates/router.py level-slider note)
+    DEV_MODE_ENABLED: bool = False  # gates /api/dev/* routes (see teammates/router.py level-slider note)
 
     # --- Database ---
     DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/crewmate"
@@ -31,6 +31,8 @@ class Settings(BaseSettings):
 
     # --- Google OAuth ---
     GOOGLE_REDIRECT_URI: str = "http://localhost:8000/api/auth/google/callback"
+    OAUTH_STATE_SECRET: str = "change-me-in-production-super-secret"
+    TOKEN_ENCRYPTION_KEY: str = "12345678901234567890123456789012" # 32 bytes
 
     # --- Anonymous landing-page demo rate limiting ---
     AGENT_DEMO_RATE_LIMIT_PER_HOUR: int = 10

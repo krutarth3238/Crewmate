@@ -299,6 +299,16 @@ function LogTab() {
       .finally(() => setIsLoading(false));
   }, [teammate]);
 
+  const handleLoadMore = () => {
+    if (!teammate || !nextCursor) return;
+    getMissions(teammate.id, nextCursor)
+      .then((r) => { 
+        setMissions(prev => [...prev, ...r.missions]); 
+        setNextCursor(r.next_cursor); 
+      })
+      .catch(() => {});
+  };
+
   if (isLoading) return (
     <div className="p-6 flex items-center gap-3 text-neutral-400 text-sm">
       <div className="w-4 h-4 rounded-full border-2 border-neutral-600 border-t-neutral-300 animate-spin" />
@@ -353,7 +363,7 @@ function LogTab() {
         ))}
       </div>
       {nextCursor && (
-        <button className="w-full mt-6 py-3.5 text-sm font-semibold text-neutral-400 hover:text-white bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all cursor-pointer">
+        <button onClick={handleLoadMore} className="w-full mt-6 py-3.5 text-sm font-semibold text-neutral-400 hover:text-white bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all cursor-pointer">
           Load more missions
         </button>
       )}
@@ -386,7 +396,9 @@ function ApproveTab({ onQuestResolved }: { onQuestResolved: () => void }) {
       await approveQuest(questId);
       setQuests((prev) => prev.filter((q) => q.id !== questId));
       onQuestResolved();
-    } catch { } finally {
+    } catch (e: any) { 
+      alert("Failed to approve quest: " + e.message);
+    } finally {
       setProcessingId(null);
     }
   };
@@ -396,7 +408,10 @@ function ApproveTab({ onQuestResolved }: { onQuestResolved: () => void }) {
     try {
       await rejectQuest(questId);
       setQuests((prev) => prev.filter((q) => q.id !== questId));
-    } catch { } finally {
+      onQuestResolved();
+    } catch (e: any) {
+      alert("Failed to reject quest: " + e.message);
+    } finally {
       setProcessingId(null);
     }
   };
@@ -633,6 +648,13 @@ export function Console({ onSignOut }: ConsoleProps) {
     name: string; color: string; tagline: string; unlocked: string[];
   } | null>(null);
 
+  useEffect(() => {
+    if (!teammate) return;
+    getQuests(teammate.id, 'pending')
+      .then((r) => setPendingApprovals(r.length))
+      .catch(() => {});
+  }, [teammate]);
+
   const handleSignOut = async () => {
     await signOut();
     onSignOut();
@@ -651,7 +673,15 @@ export function Console({ onSignOut }: ConsoleProps) {
   };
 
   const handleQuestResolved = async () => {
-    await refreshTeammate();
+    const fresh = await refreshTeammate();
+    if (fresh && fresh.current_level.id > previousLevelId) {
+      setLevelUpData({
+        name: fresh.current_level.name,
+        color: fresh.current_level.color,
+        tagline: fresh.current_level.tagline,
+        unlocked: fresh.current_level.unlocked_permissions,
+      });
+    }
     setPendingApprovals((prev) => Math.max(0, prev - 1));
   };
 
@@ -715,7 +745,7 @@ export function Console({ onSignOut }: ConsoleProps) {
                   </span>
                 </div>
                 <span className="text-xs font-semibold text-neutral-400">
-                  {teammate.current_xp} / {teammate.next_level_xp} XP
+                  {teammate.current_xp} {teammate.next_level_xp ? `/ ${teammate.next_level_xp}` : '(Max)'} XP
                 </span>
               </div>
               <XpBar xp={teammate.current_xp} nextLevelXp={teammate.next_level_xp} levelColor={level.color} />

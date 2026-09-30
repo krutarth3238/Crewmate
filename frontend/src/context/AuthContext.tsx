@@ -77,8 +77,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
 
         } catch (error: any) {
-          // If 404, User has Firebase account but no backend record yet — onboarding needed
-          if (error?.message?.includes('404')) {
+          // The backend returns 401 if the user record doesn't exist yet (onboarding needed)
+          if (error?.message?.includes('401') || error?.message?.includes('No local account')) {
             setBackendUser(null);
           } else {
             console.error("Backend error or offline:", error);

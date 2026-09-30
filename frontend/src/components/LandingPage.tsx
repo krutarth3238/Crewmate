@@ -102,7 +102,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
     }
   ];
 
-  const handleRunThinking = (queryToRun?: string) => {
+  const handleRunThinking = async (queryToRun?: string) => {
     const q = queryToRun || userInput;
     if (!q.trim() || isThinking) return;
 
@@ -112,8 +112,35 @@ export const LandingPage: React.FC<LandingPageProps> = ({
     setPlanSteps([]);
     setActiveStepIndex(0);
 
-    // Find preset or build dynamic plan
-    const matched = quickPrompts.find(p => p.query.toLowerCase() === q.toLowerCase()) || quickPrompts[0];
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      const res = await fetch(`${API_URL}/api/agent/trigger`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ objective: q })
+      });
+      if (res.ok) {
+          const data = await res.json();
+          if (data.status === 'demo_completed') {
+              const steps = data.demo_plan_steps || [];
+              for (let i = 0; i < steps.length; i++) {
+                  setPlanSteps(prev => [...prev, { name: steps[i].tool || 'Step', tool: steps[i].tool }]);
+                  setActiveStepIndex(i);
+                  await new Promise(r => setTimeout(r, 800));
+              }
+              setIsThinking(false);
+              setActiveStepIndex(steps.length);
+              setFindingResult({
+                  status: '✅ Success',
+                  insight: data.demo_summary,
+                  action: 'Systems updated: ' + (data.demo_systems_touched?.join(', ') || 'None')
+              });
+              return;
+          }
+      }
+    } catch (e) {
+      console.error(e);
+    }
 
     // Step 1
     setTimeout(() => {

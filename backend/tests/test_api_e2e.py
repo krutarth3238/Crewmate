@@ -96,7 +96,7 @@ async def test_full_onboarding_and_mission_flow(client: AsyncClient):
     assert resp.json()["founder_name"] == "Ada Lovelace"
 
     # 3. Create a workspace.
-    resp = await client.post("/api/workspaces", json={"name": "Ada Co", "business_type": "SaaS"}, headers={"Authorization": "Bearer fake"})
+    resp = await client.post("/api/workspaces", json={"name": "Ada Co", "business_type": "SaaS", "location": "London", "sub_niche": "AI"}, headers={"Authorization": "Bearer fake"})
     assert resp.status_code == 201, resp.text
     workspace_id = resp.json()["id"]
 

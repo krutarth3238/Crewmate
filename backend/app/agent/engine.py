@@ -82,12 +82,12 @@ def _fallback_plan(objective: str) -> list[dict]:
     # Reject clearly off-topic requests (coding, general trivia, etc.)
     off_topic_signals = (
         "code", "program", "function", "algorithm", "syntax", "compiler",
-        "python", "javascript", "java ", "rust", "c++", "golang", "typescript",
+        "python", "javascript", "java", "rust", "c++", "golang", "typescript",
         "linked list", "sort", "binary search", "recursion", "loop", "array",
-        "hello world", "print(", "println", "console.log", "def ", "class ",
-        "import ", "var ", "let ", "const ", "function(",
+        "hello world", "print", "println", "console.log", "def", "class",
+        "import", "var", "let", "const",
         "what is the capital", "how to code", "write a script",
-        "trivia", "explain ", "what is ", "how does ",
+        "trivia", "explain", "what is", "how does",
     )
     if any(sig in text for sig in off_topic_signals):
         return [{"tool": "__refused__", "args": {"reason": "I'm your AI co-founder, not a coding assistant or general chatbot. I only handle real business tasks: scheduling meetings, sending emails, market research, social updates, invoices, and proposals."}, "reason": "Off-topic request."}]
@@ -125,10 +125,7 @@ def _fallback_plan(objective: str) -> list[dict]:
     if has_word(("form", "survey", "questionnaire", "feedback")):
         steps.append({"tool": "create_form", "args": {"title": objective[:50], "description": "Form auto-generated based on objective"}, "reason": "Objective implies creating a Google Form."})
 
-    # Deduplicate: if a document/autonomous tool is present, drop any spurious send_email step
-    doc_tools = {"create_presentation", "create_form", "generate_report", "create_proposal", "create_task_list", "generate_invoice", "handle_complaint"}
-    if any(s.get("tool") in doc_tools for s in steps):
-        steps = [s for s in steps if s.get("tool") != "send_email"]
+    # Removed aggressive deduplication that was dropping send_email when generate_invoice triggered
 
     if has_word(("meeting", "schedule", "call", "sync")):
         # Try to extract who the meeting is with
@@ -215,7 +212,7 @@ async def _plan_objective(objective: str, teammate: Teammate | None = None) -> t
             system_prompt += context_str
 
         response = await client.chat.completions.create(
-            model="llama-3.3-70b-versatile",  # planner must use a valid Groq model
+            model=settings.GROQ_MODEL,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": objective},
@@ -405,14 +402,17 @@ async def execute_for_teammate(db: AsyncSession, teammate: Teammate, user: User,
     results = [await run_tool(step["tool"], step.get("args", {}), context_str, user) for step in plan]
     systems_touched = sorted({s for r in results for s in r.systems_touched})
     summary = " ".join(r.output for r in results)
-    xp_awarded = XP_BASE + XP_PER_STEP * len(plan)
+    
+    is_refused = len(plan) == 1 and plan[0].get("tool") == "__refused__"
+    xp_awarded = 0 if is_refused else (XP_BASE + XP_PER_STEP * len(plan))
+    status_val = "completed_with_errors" if is_refused else ("completed" if all(r.ok for r in results) else "completed_with_errors")
 
     mission = Mission(
         teammate_id=teammate.id,
         ref_code=_ref_code("MSN"),
         title=objective[:200],
         category="agent-execution",
-        status="completed" if all(r.ok for r in results) else "completed_with_errors",
+        status=status_val,
         execution_duration=f"{len(plan)} step(s)",
         systems_touched=systems_touched,
         summary=summary,
@@ -427,7 +427,7 @@ async def execute_for_teammate(db: AsyncSession, teammate: Teammate, user: User,
     db.add(mission)
     await db.flush()
 
-    agent_run.status = "completed"
+    agent_run.status = status_val
     agent_run.resulting_mission_id = mission.id
     agent_run.completed_at = datetime.now(timezone.utc)
     await db.commit()

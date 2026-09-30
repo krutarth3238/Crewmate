@@ -1,8 +1,12 @@
 import os
+import hmac
+import hashlib
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import RedirectResponse
 from google_auth_oauthlib.flow import Flow
 from sqlalchemy.ext.asyncio import AsyncSession
+from cryptography.fernet import Fernet
+import base64
 
 from app.config import get_settings
 from app.database import get_db
@@ -25,7 +29,30 @@ GOOGLE_SCOPES = [
 ]
 
 # Relax OAuth requirements for local development
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+if settings.ENV == "development":
+    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+    os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = "1"
+
+def _get_fernet():
+    key = settings.TOKEN_ENCRYPTION_KEY.encode('utf-8')
+    key = base64.urlsafe_b64encode(key.ljust(32)[:32])
+    return Fernet(key)
+
+def sign_state(user_id: int, verifier: str, secret: str) -> str:
+    msg = f"{user_id}:{verifier}".encode()
+    sig = hmac.new(secret.encode(), msg, hashlib.sha256).hexdigest()
+    return f"{user_id}:{verifier}:{sig}"
+
+def verify_state(state: str, secret: str) -> tuple[int, str]:
+    parts = state.split(":")
+    if len(parts) != 3:
+        raise ValueError("Invalid state")
+    user_id_str, verifier, sig = parts
+    msg = f"{user_id_str}:{verifier}".encode()
+    expected_sig = hmac.new(secret.encode(), msg, hashlib.sha256).hexdigest()
+    if not hmac.compare_digest(sig, expected_sig):
+        raise ValueError("Signature mismatch")
+    return int(user_id_str), verifier
 
 
 @router.get("/connect")
@@ -44,7 +71,7 @@ async def connect_google(user: User = Depends(get_current_user)):
     # verifier first, then encode it directly into the state parameter alongside the user ID.
     flow.authorization_url()
     
-    custom_state = f"{user.id}:{flow.code_verifier}"
+    custom_state = sign_state(user.id, flow.code_verifier, settings.OAUTH_STATE_SECRET)
 
     auth_url, _ = flow.authorization_url(
         access_type="offline",
@@ -62,9 +89,9 @@ async def google_callback(
     error: str | None = None,
     db: AsyncSession = Depends(get_db),
 ):
-    import os
-    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-    os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = "1"
+    if settings.ENV == "development":
+        os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+        os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = "1"
     """
     Receives the authorization code and state from Google, exchanges it for tokens,
     and saves them to the corresponding User.
@@ -75,8 +102,7 @@ async def google_callback(
         return RedirectResponse(url=settings.FRONTEND_ORIGIN)
 
     try:
-        user_id_str, code_verifier = state.split(":", 1)
-        user_id = int(user_id_str)
+        user_id, code_verifier = verify_state(state, settings.OAUTH_STATE_SECRET)
     except ValueError:
         return RedirectResponse(url=settings.FRONTEND_ORIGIN)
 
@@ -85,7 +111,8 @@ async def google_callback(
         scopes=GOOGLE_SCOPES,
         redirect_uri=settings.GOOGLE_REDIRECT_URI,
     )
-    flow.code_verifier = code_verifier
+    if code_verifier and code_verifier != "None":
+        flow.code_verifier = code_verifier
 
     # Reconstruct the full URL to pass into fetch_token
     auth_response = str(request.url)
@@ -96,8 +123,11 @@ async def google_callback(
     # Update the user record
     user = await db.get(User, user_id)
     if user:
-        user.google_refresh_token = credentials.refresh_token
-        user.google_access_token = credentials.token
+        fernet = _get_fernet()
+        if credentials.refresh_token:
+            user.google_refresh_token = fernet.encrypt(credentials.refresh_token.encode()).decode()
+        if credentials.token:
+            user.google_access_token = fernet.encrypt(credentials.token.encode()).decode()
         user.google_token_expiry = credentials.expiry
         user.google_connected = True
         await db.commit()

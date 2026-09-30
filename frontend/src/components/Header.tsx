@@ -96,7 +96,7 @@ export const Header: React.FC<HeaderProps> = ({
                   />
                 </div>
                 <span className="text-[9px] font-mono text-neutral-500 font-semibold">
-                  {teammate.currentXp}/{teammate.nextLevelXp} XP
+                  {teammate.currentXp}{teammate.nextLevelXp ? `/${teammate.nextLevelXp}` : ' (Max)'} XP
                 </span>
               </div>
             </div>

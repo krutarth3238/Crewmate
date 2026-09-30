@@ -15,7 +15,7 @@ from app.teammates import service as teammate_service
 
 
 async def get_quest_for_owner(db: AsyncSession, quest_id: int, owner) -> ApprovalQuest:
-    result = await db.execute(select(ApprovalQuest).where(ApprovalQuest.id == quest_id))
+    result = await db.execute(select(ApprovalQuest).where(ApprovalQuest.id == quest_id).with_for_update())
     quest = result.scalar_one_or_none()
     if quest is None:
         raise not_found("Quest not found.")
@@ -36,6 +36,7 @@ async def approve_quest(db: AsyncSession, quest: ApprovalQuest, user=None):
     # Execute any real side-effects from the stored plan (single pass — collect results + follow_up_quests together)
     execution_notes = []
     all_follow_up_quests: list[dict] = []
+    has_error = False
     if quest.details:
         import json as _json
         try:
@@ -49,12 +50,16 @@ async def approve_quest(db: AsyncSession, quest: ApprovalQuest, user=None):
                 try:
                     result = await run_tool(tool_name, args, user=user)
                     execution_notes.append(f"[{tool_name}]: {result.output}")
+                    if not result.ok:
+                        has_error = True
                     # Collect any follow-up approval quests this tool wants to create
                     if result.follow_up_quests:
                         all_follow_up_quests.extend(result.follow_up_quests)
                 except Exception as e:
+                    has_error = True
                     execution_notes.append(f"{tool_name} execution error: {str(e)})")
         except Exception as e:
+            has_error = True
             execution_notes.append(f"Failed to parse or execute plan: {str(e)}")
 
     # Create follow-up ApprovalQuest records (e.g. "send reply email" after handle_complaint)
@@ -89,17 +94,17 @@ async def approve_quest(db: AsyncSession, quest: ApprovalQuest, user=None):
         ref_code=_new_ref_code("MSN"),
         title=quest.title,
         category="approved-quest",
-        status="completed",
+        status="completed_with_errors" if has_error else "completed",
         execution_duration="—",
         systems_touched=quest.systems,
         summary=f"Approved via quest {quest.ref_code}: {quest.reason}" + (f" | {notes_str}" if notes_str else ""),
         audited_value=quest.amount_or_scope,
-        confidence_score=1.0,
+        confidence_score=0.0 if has_error else 1.0,
         verification_seal=_new_ref_code("SEAL"),
         before_state=None,
         after_state=None,
         journal_lines_count=1,
-        xp_awarded=quest.xp_reward,
+        xp_awarded=0 if has_error else quest.xp_reward,
     )
     db.add(mission)
     await db.flush()  # get mission.id before we reference it
@@ -109,7 +114,8 @@ async def approve_quest(db: AsyncSession, quest: ApprovalQuest, user=None):
     quest.resolved_at = datetime.now(timezone.utc)
     await db.commit()
 
-    teammate = await teammate_service.award_xp(db, teammate, quest.xp_reward)
+    if not has_error:
+        teammate = await teammate_service.award_xp(db, teammate, quest.xp_reward)
     await teammate_service.record_mission_completion(db, teammate)
 
     await db.refresh(mission)
