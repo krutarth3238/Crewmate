@@ -1,30 +1,37 @@
 <div align="center">
+  <img src="https://via.placeholder.com/150/000000/FFFFFF/?text=Crewmate" alt="Crewmate Logo" width="120" height="120" style="border-radius: 20px; margin-bottom: 20px;">
   <h1>🚀 Crewmate</h1>
   <p><b>Your Gamified AI Co-Founder Console</b></p>
   
   [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
   [![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)](https://reactjs.org/)
   [![PostgreSQL](https://img.shields.io/badge/postgresql-4169e1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+  [![Groq](https://img.shields.io/badge/Groq-F55036?style=for-the-badge&logo=groq&logoColor=white)](https://groq.com/)
+  [![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
+
+  <br />
+  
+  <h3>🔗 <a href="https://crewmate-kohl.vercel.app">Live Demo (Vercel)</a> | ⚙️ <a href="https://crewmate-31bm.onrender.com/docs">API Docs (Render)</a></h3>
 </div>
 
 ---
 
-**Crewmate** is a next-generation gamified AI co-founder console. Built with a server-authoritative trust engine, real agent execution loops, and secure Firebase authentication, Crewmate brings your digital teammate to life. Level up your AI teammate, assign missions, and build the future together!
+**Crewmate** is a next-generation gamified AI co-founder console. Built with a server-authoritative trust engine, real agent execution loops, and secure stateless authentication, Crewmate brings your digital teammate to life. Level up your AI teammate, assign missions, and build the future together!
 
 ## ✨ Features
 
 - **🎮 Server-Authoritative Trust Engine:** The XP and autonomy level of your AI teammate are rigorously verified on the server. Level ups happen organically as missions succeed.
-- **🤖 Real Agent Execution Loop:** Utilizing Groq, the agent plans and executes tasks against sandboxed tools.
-- **🛡️ Boundary-Gated Autonomy:** Objectives outside the teammate's current autonomy level become pending `ApprovalQuests` instead of running silently. You remain in control.
+- **🤖 Real Agent Execution Loop:** Utilizing Groq's lightning-fast inference, the agent parses natural language, plans objectives, and executes tasks against simulated Google Workspace tools.
+- **🛡️ Boundary-Gated Autonomy:** RPG-style permissions mean your agent starts at Level 1 (Shadow) and grows to Level 5 (Co-Founder). Objectives outside the teammate's current autonomy level become pending `ApprovalQuests`. You remain in control.
 - **📜 Append-Only Mission Audit Log:** Track everything your AI co-founder does. Missions are securely logged and cannot be tampered with.
-- **🔐 Secure Authentication:** Integrated with Firebase Auth and Admin SDK for bulletproof token verification.
+- **🔐 Stateless Secure Authentication:** Integrated with Firebase Auth and a stateless Google OAuth 2.0 flow using HMAC-SHA256 signatures for bulletproof token verification without server-side sessions.
 
 ## 🏗️ Architecture
 
-Crewmate is divided into two core parts:
+Crewmate is divided into two core parts, designed to be completely decoupled:
 
-1. **Frontend:** A React + Vite app providing the sleek, gamified console interface.
-2. **Backend:** An asynchronous FastAPI + PostgreSQL + SQLAlchemy 2.0 backend powering the trust engine, agent logic, and mission audits.
+1. **Frontend:** A React + Vite + Tailwind CSS app providing a sleek, glassmorphic, gamified console interface.
+2. **Backend:** An asynchronous FastAPI + PostgreSQL + SQLAlchemy 2.0 backend powering the trust engine, LLM agent planner, and mission audits.
 
 ```mermaid
 flowchart LR
@@ -137,7 +144,7 @@ class node_googleoauth,node_database,node_models toneRose
 class node_founder,node_firebase,node_groq toneIndigo
 ```
 
-## 🚀 Quick Start
+## 🚀 Local Setup
 
 ### 1. Backend Setup
 
@@ -147,7 +154,7 @@ cd backend
 ```
 1. Set up a virtual environment and install dependencies:
    ```bash
-   python3 -m venv .venv
+   python -m venv .venv
    source .venv/bin/activate
    pip install -r requirements.txt
    ```
@@ -155,13 +162,12 @@ cd backend
    ```bash
    cp .env.example .env
    ```
-   *Make sure to set `DATABASE_URL` and `FIREBASE_SERVICE_ACCOUNT_PATH`.*
+   *Make sure to set `DATABASE_URL` (Supabase recommended), `FIREBASE_SERVICE_ACCOUNT_JSON`, and `GROQ_API_KEY`.*
 3. Run migrations and start the server:
    ```bash
    alembic upgrade head
    uvicorn app.main:app --reload --port 8000
    ```
-   *The backend will be available at `http://localhost:8000/docs`.*
 
 ### 2. Frontend Setup
 
@@ -173,7 +179,7 @@ cd frontend
    ```bash
    npm install
    ```
-2. Configure your environment variables in `.env`.
+2. Configure your environment variables in `.env` (pointing `VITE_API_URL` to your backend).
 3. Start the dev server:
    ```bash
    npm run dev
