@@ -48,18 +48,18 @@ Shape:
 {"steps": [{"tool": "<tool_name>", "args": {...}, "reason": "<why this step>"}]}
 
 Available tools:
-- research_web: business research only (market, competitors, suppliers). NEVER use for coding or general trivia.
-- send_email: send a business email
-- post_social_update: post to social media
-- schedule_meeting: schedule a calendar meeting (include iso_datetime if date/time mentioned)
-- update_spreadsheet: update a tracking spreadsheet
+- research_web: business research only (market, competitors, suppliers). NEVER use for coding or general trivia. Args: topic
+- send_email: send a business email. Args: to, subject
+- post_social_update: post to social media. Args: channel
+- schedule_meeting: schedule a calendar meeting (include iso_datetime if date/time mentioned). Args: with, subject, iso_datetime
+- update_spreadsheet: update a tracking spreadsheet. Args: sheet
 - generate_invoice: generate PDF invoice (Level 4+). Args: client_name, client_email, amount, description
 - create_proposal: create Google Doc proposal (Level 4+). Args: client, subject
 - create_task_list: create Google Tasks list (Level 4+). Args: title
 - generate_report: generate P&L report from Sheets (Level 5+). Args: report_type, sheet_id
 - schedule_meeting_with_meet: calendar event with Google Meet link (Level 5+). Args: with, subject, iso_datetime
 - create_presentation: create Google Slides deck (Level 5+). Args: topic
-- handle_complaint: scan Gmail inbox for complaints (Level 5+)
+- handle_complaint: scan Gmail inbox for complaints (Level 5+). Args: customer_name, complaint
 - create_form: generate a Google Form (Level 5+). Args: title, description
 
 Produce between 1 and 4 steps. Keep "reason" to one short sentence.
