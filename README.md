@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="https://via.placeholder.com/150/000000/FFFFFF/?text=Crewmate" alt="Crewmate Logo" width="120" height="120" style="border-radius: 20px; margin-bottom: 20px;">
   <h1>🚀 Crewmate</h1>
   <p><b>Your Gamified AI Co-Founder Console</b></p>
   
